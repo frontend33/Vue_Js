@@ -1,0 +1,66 @@
+<!doctype html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="css/homework.css" rel="stylesheet">
+    <script src="js/vue.js"></script>
+</head>
+<body>
+    <style type="text/css">
+        .wrapper{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
+    <div class="wrapper">
+        <div class="sample">
+            <form class="vue-form">
+                     <label class="label" for="email">Email</label>
+                    <input type="text" v-model="email" >
+                       <br>
+                     <label class="label" for="name">Name</label>
+                    <input type="text" v-model="firstName">
+                      <br>
+                    <label class="label" for="lastName">lastName</label>
+                    <input type="text" v-model="lastName">
+                            <br>
+                    <label class="label" for="Phone">Phone</label>
+                    <input type="text">
+                    <hr>
+
+                    <h3>Hello, {{ firstName }}</h3>
+                  
+                    <h3>Guests</h3> 
+                    <button class="btn btn-primary">+</button>   
+                <br>
+                     <br>
+                          <br>
+                    <button class="btn btn-success" 
+                            >
+                        ToggleText
+                    </button>
+                    <hr>
+                  
+                </div>
+            </div>
+            </form>
+
+    <script>
+        let sample = new Vue({
+            el: '.sample',
+            data: {
+                email: '',
+                firstName: 'Zho',
+                lastName: 'Vikulov',
+                Phone: '',
+
+
+            }
+        });
+    </script>
+</body>
+</html>
