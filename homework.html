@@ -19,7 +19,7 @@
     <div class="wrapper">
         <div class="sample">
             <form class="vue-form">
-                     <label class="label" for="email">Email</label>
+                    <label class="label" for="email">Email</label>
                     <input type="text" v-model="email" >
                        <br>
                      <label class="label" for="name">Name</label>
@@ -29,34 +29,83 @@
                     <input type="text" v-model="lastName">
                             <br>
                     <label class="label" for="Phone">Phone</label>
-                    <input type="text">
+                    <input type="text"  v-model="Phone">
                     <hr>
+                    <h3 >Hello, {{ firstName }}</h3>
 
-                    <h3>Hello, {{ firstName }}</h3>
-                  
-                    <h3>Guests</h3> 
-                    <button class="btn btn-primary">+</button>   
-                <br>
+                    <h3 >guests</h3>
+                    <button class="btn btn-primary" 
+                            @click="newElement($event)">+
+                    </button>  
+
+                    <div class="block-guests">
+                        <label class="guests" v-for="(number,index) in numbers" 
+                            @dblclick="removeDoubleClick($event)">
+                            Guests {{index}}
+                    </label> 
+                    </div> 
+                    
+                     <br>
                      <br>
                           <br>
-                    <button class="btn btn-success" 
-                            >
+                    <button class="btn btn-success">
                         ToggleText
-                    </button>
-                    <hr>
-                  
+                    </button> 
+                   </form>
+
+
+
                 </div>
             </div>
-            </form>
-
+    
     <script>
         let sample = new Vue({
             el: '.sample',
             data: {
+                numbers: [],
                 email: '',
-                firstName: 'Zho',
+                firstName: 'Zhora',
                 lastName: 'Vikulov',
                 Phone: '',
+            },
+            methods: {
+                newElement(e){
+                    e.preventDefault()
+                    // let myForm=document.querySelector(".vue-form")
+                    // let div = document.createElement("div");
+                    // div.setAttribute('class', 'block-guests1');
+                    // var questsN=document.querySelector(".guests")
+                    // // div.appendChild(questsN)
+
+                    // myForm.appendChild(div);
+                    let div = document.createElement("div");
+                    div.setAttribute('class', 'block-guests1');
+                    let arra=document.querySelector(".guests")
+                    console.log(e)
+
+                    let myBlock=document.querySelector(".block-guests")
+                    var questsN=document.querySelector(".guests")
+                    let input = document.createElement("input");
+                    input.type = "text";
+                    // input.v-model = "Hello";
+                    myBlock.appendChild(input);
+                    // myBlock.appendChild(questsN);
+                    // myForm.insertAfter(input)
+                    this.numbers.push(Math.floor(Math.random() * 10));
+                    
+
+
+
+
+                },
+                removeDoubleClick(e){
+                    console.log(e.target)
+                    e.target.remove()
+
+
+
+                }
+                
 
 
             }
