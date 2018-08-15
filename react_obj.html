@@ -38,18 +38,13 @@
                     <button class="btn btn-primary" 
                             @click="newElement($event)">+
                     </button>  
- <!--                <div class="zhora cold-md-5 col-md-offset-7" >
-                 <span v-for="(number,index) in numbers" @dblclick="removeDoubleClick(index)">
-                     <label > Guests {{index}}</label>
-                       <input type="text" class="form-control" v-model="numbers[index]">
-                 </span>
-                </div> -->
 
- <div class="zhora cold-md-5 col-md-offset-7" v-for="(number, index) in numbers">
-                <label @dblclick="removeDoubleClick(index)">
-                    Guests {{index}}
-                </label>
-                <input type="text" class="form-control" v-model="numbers[index]">
+
+            <div class="zhora cold-md-5 col-md-offset-7" v-for="(number,key, index) in numbers"
+                                                         :key="key">
+                <label @dblclick="removeDoubleClick(key)" :for="'number'+(key+1)">
+                    Guests {{index}} - {{key}} </label>
+                <input type="text" class="form-control" v-model="numbers[key]" :id="'number'+(key+1)">
             </div>
 
                 
@@ -62,13 +57,21 @@
 
                     
                    </form>
- <table class="table table-bordered" v-else>
-                                <tr v-for="(value, key, i) in info">
-                                    <td>{{ i }}</td>
-                                    <td>{{ key }}</td>
-                                    <td>{{ value }}</td>
-                                </tr>
-                             </table>
+                <table class="table table-bordered" v-else>
+                    <tr v-for="(value, key, i) in info">
+                        <td>{{ i }}</td>
+                        <td>{{ key }}</td>
+                        <td>{{ value }}</td>
+                        <td>Guests</td>
+                        <td>
+                            <ul>
+                                <li v-for="(number, index) in numbers">
+                                    {{ number }}
+                                </li>
+                            </ul>
+                        </td>
+                    </tr>
+                </table>
                 </div>
             </div>
     
@@ -77,7 +80,8 @@
             el: '.sample',
             data: {
                     formSubmited: false,
-                    numbers: [],
+                    numbers: {},
+                    numbersPrimaryKey: 0,
                     info: {
                             email: '',
                             firstName: 'Zhora',
@@ -88,12 +92,18 @@
             methods: {
                 newElement(e){
                     e.preventDefault()
-                    this.numbers.push('');
+                    // Не перезаписываем ключи (что бы индексы не менялись)
+                    this.numbersPrimaryKey ++;
+                    // this.numbers[this.numbersPrimaryKey]=''
+                    this.$set(this.numbers,this.numbersPrimaryKey,'')
+                // console.log(this.numbers)
+                    // this.numbers.push('');
 
 
                 },
                 removeDoubleClick(index){
-                    this.numbers.splice(index, 1);
+                    // this.numbers.splice(index, 1);
+                    this.$delete(this.numbers,index);
 
                 },
                

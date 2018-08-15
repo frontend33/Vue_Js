@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="css/homework.css" rel="stylesheet">
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <style type="text/css">
+    .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .progress{
+        margin-top: 23px; 
+    }
+
+    .fa {
+        font-size: 18px;
+    }
+    </style>
+    <div class="wrapper">
+        <div class="sample">
+            <div class="progress">
+                <div class="progress-bar" role="progressbar" aria-valuenow=" completed " aria-valuemin="0" aria-valuemax="100" style="width:70%" :style="{ width: completed + '%' }">
+                    {{completed}} %
+                </div>
+            </div>
+            <form class="vue-form" v-if="!formSubmited" @submit.prevent="formSubmited = true">
+                <div class="cicle-input" v-for="(item,index) in items">
+                    <label class="label">{{ item.name }}
+                        <span class="fa" v-if="controls[index].success" :class="controls[index].error ? 
+                                                        'fa-exclamation-circle text-danger' : 
+                                                         'fa-check-circle text-success'">
+                        </span>
+                    </label>
+                    <input type="text" :value="item.value" @input="test(index,$event.target.value)"
+                                                           @focus="checkCompleted(items,index)" >
+                </div>
+                <h3>Hello, {{ items.name }}</h3>
+                <br>
+                <h3>guests</h3>
+                <button class="btn btn-primary" @click="newElement($event)">+
+                </button>
+                <div class="zhora cold-md-5 col-md-offset-7" v-for="(number, index) in numbers">
+                    <label @dblclick="removeDoubleClick(index)">
+                        Guests {{index}}
+                    </label>
+                    <input type="text" class="form-control" v-model="numbers[index]">
+                </div>
+                <br>
+                <br>
+                <br>
+                <button vi class="btn btn-success" :disabled="completed != 100">
+                    Отправить форму
+                </button>
+            </form>
+            <table class="table table-bordered" v-else>
+                <tr v-for="(value, key, i) in items">
+                    <td>{{ i }}</td>
+                    <td>{{ key }}</td>
+                    <td>{{ value }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+    let sample = new Vue({
+        el: '.sample',
+        data: {
+            formSubmited: false,
+            numbers: [],
+            completed: 0,
+            info: {
+                email: '',
+                firstName: '',
+                lastName: 'Vikulov',
+                Phone: '',
+            },
+            items: [{
+                    name: 'Name',
+                    value: '',
+                    pattern: /^[a-zA-Z ]{2,30}$/
+                },
+                {
+                    name: 'Phone',
+                    value: '',
+                    pattern: /^[0-9]{7,14}$/
+                },
+                {
+                    name: 'Email',
+                    value: '',
+                    pattern: /.+/
+                },
+                {
+                    name: 'Some Field 1',
+                    value: '',
+                    pattern: /.+/
+                },
+                {
+                    name: 'Some Field 2',
+                    value: '',
+                    pattern: /.+/
+                }
+            ],
+            controls: [],
+
+        },
+
+        computed: {
+
+        },
+
+        created() {
+            for (let i = 0; i < this.items.length; i++) {
+                this.controls.push({
+                    error: !this.items[i].pattern.test(this.items[i].value),
+                    success: this.items[i].value != ''
+                });
+            }
+
+        },
+        methods: {
+            test(e, value) {
+                let data = this.items[e];
+                let pattern = data.pattern
+                data.value = value;
+                let control = this.controls[e];
+                control.error = !pattern.test(value)
+                control.success = true;
+            },
+
+            // checkCompleted() {
+            //     console.log("gewl")
+            // },
+            checkCompleted(items,index) {
+                let totalInputs =this.items.length
+                let filledInputs = 0;
+                let find = filledInputs / totalInputs * 100;
+                // this.completed+= completed
+                // item.each(function(e) {
+                //     consolr.log(e)
+                //     // if ((this.value)) {
+                //     //   filledInputs++;
+                //     // }
+                //   });
+
+
+                // if ()
+                // console.log(item)
+                // console.log(items.index)
+                console.log(items)
+            },
+            
+            ready: function() {
+                // check for any existing values on page load, set accordingly
+                this.checkCompleted();
+            },
+
+
+            newElement(e) {
+                e.preventDefault()
+                this.numbers.push('');
+
+
+            },
+            removeDoubleClick(index) {
+                this.numbers.splice(index, 1);
+
+            },
+
+
+
+
+        },
+
+
+    });
+    </script>
+</body>
+
+</html>
