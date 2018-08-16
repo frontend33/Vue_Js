@@ -14,9 +14,6 @@ Georgy (frontend33)
 You can see all my works in my repository  [https://github.com/frontend33]
 
 # Usage!
-Once installed you have access to four components (vue-form, validate, field, field-messages) for managing form state, validating form fields and displaying validation messages.
-
-
 > Once installed you have access to component (vue-form) for managing form state, 
 > validating form fields on  patterns and displaying success messages.
 
