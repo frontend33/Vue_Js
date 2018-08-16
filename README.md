@@ -1,12 +1,10 @@
-# Dillinger
 
 
 
-Georgy Vikulov 
+# Author!
+Georgy (frontend33) 
 
-  - Type some Markdown on the left
-  - See HTML in the right
-  - Magic
+
 
 # New Features!
 
