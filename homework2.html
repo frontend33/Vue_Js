@@ -24,11 +24,6 @@
     </style>
     <div class="wrapper">
         <div class="sample">
-            <!-- <div class="progress">
-                    <div class="progress-bar" :style="progressWidth" >{{completed}}</div>
-                </div> -->
-
-
         <h2 v-if="completed == 100">Успешно
         <span class="fa fa-smile-o"></span>
         </h2>
@@ -55,7 +50,7 @@
                                                          'fa-check-circle text-success'">
                         </span>
                     </label>
-                    <input type="text" :value="item.value" @input="test(index,$event.target.value)">
+                    <input type="text" :value="item.value" @input="onInput(index,$event.target.value)">
                 </div>
                 <br>
                 <h3>guests</h3>
@@ -136,7 +131,7 @@
         },
 
         
-
+// Обращаемся к hoocks
         created() {
             for (let i = 0; i < this.items.length; i++) {
                 this.controls.push({
@@ -147,11 +142,12 @@
 
         },
         methods: {
-            test(e, value) {
+            onInput(e, value) {
                 let data = this.items[e];
                 let pattern = data.pattern
                 data.value = value;
                 let control = this.controls[e];
+                // pattern.test говорит что все хорошо
                 control.error = !pattern.test(value)
                 control.success = true;
             },

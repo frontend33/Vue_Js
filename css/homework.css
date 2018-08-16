@@ -80,8 +80,9 @@ h3{
 }
 .vue-form h4,
 .vue-form .label {
-  color: #94aab0;
+  color: #000;
   margin-bottom: 10px;
+  font-size: 100%
 }
 .vue-form .label {
   display: block;
