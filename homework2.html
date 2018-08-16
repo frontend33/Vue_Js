@@ -18,22 +18,36 @@
         align-items: center;
         justify-content: center;
     }
-    .progress{
-        margin-top: 23px; 
-    }
-
     .fa {
         font-size: 18px;
     }
     </style>
     <div class="wrapper">
         <div class="sample">
-            <div class="progress">
-                <div class="progress-bar" role="progressbar" aria-valuenow=" completed " aria-valuemin="0" aria-valuemax="100" style="width:70%" :style="{ width: completed + '%' }">
-                    {{completed}} %
-                </div>
-            </div>
+            <!-- <div class="progress">
+                    <div class="progress-bar" :style="progressWidth" >{{completed}}</div>
+                </div> -->
+
+
+        <h2 v-if="completed == 100">Успешно
+        <span class="fa fa-smile-o"></span>
+        </h2>
+        <h2 v-else>Заполните все поля
+          <span class="fa fa-frown-o"></span>
+        </h2>
+        <hr />
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" 
+               :style="progressWidth"
+               :class="{'progress-bar-success' : completed === 100}"
+               >
+            {{ completed }}%
+          </div>
+        </div>
+
+
             <form class="vue-form" v-if="!formSubmited" @submit.prevent="formSubmited = true">
+                 
                 <div class="cicle-input" v-for="(item,index) in items">
                     <label class="label">{{ item.name }}
                         <span class="fa" v-if="controls[index].success" :class="controls[index].error ? 
@@ -41,10 +55,8 @@
                                                          'fa-check-circle text-success'">
                         </span>
                     </label>
-                    <input type="text" :value="item.value" @input="test(index,$event.target.value)"
-                                                           @focus="checkCompleted(items,index)" >
+                    <input type="text" :value="item.value" @input="test(index,$event.target.value)">
                 </div>
-                <h3>Hello, {{ items.name }}</h3>
                 <br>
                 <h3>guests</h3>
                 <button class="btn btn-primary" @click="newElement($event)">+
@@ -58,17 +70,25 @@
                 <br>
                 <br>
                 <br>
-                <button vi class="btn btn-success" :disabled="completed != 100">
+                    <button class="btn btn-primary" :disabled="done < items.length">
                     Отправить форму
                 </button>
             </form>
-            <table class="table table-bordered" v-else>
+<!--             <table class="table table-bordered" v-else>
                 <tr v-for="(value, key, i) in items">
                     <td>{{ i }}</td>
                     <td>{{ key }}</td>
                     <td>{{ value }}</td>
                 </tr>
-            </table>
+            </table> -->
+            <table class="table table-bordered" v-else>
+                    <tr v-for="(item, index) in  items">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.value }}</td>
+                    </tr>
+                </table>
+
+
         </div>
     </div>
     <script>
@@ -77,7 +97,6 @@
         data: {
             formSubmited: false,
             numbers: [],
-            completed: 0,
             info: {
                 email: '',
                 firstName: '',
@@ -111,12 +130,12 @@
                 }
             ],
             controls: [],
+            completed: 0,
+
 
         },
 
-        computed: {
-
-        },
+        
 
         created() {
             for (let i = 0; i < this.items.length; i++) {
@@ -137,34 +156,6 @@
                 control.success = true;
             },
 
-            // checkCompleted() {
-            //     console.log("gewl")
-            // },
-            checkCompleted(items,index) {
-                let totalInputs =this.items.length
-                let filledInputs = 0;
-                let find = filledInputs / totalInputs * 100;
-                // this.completed+= completed
-                // item.each(function(e) {
-                //     consolr.log(e)
-                //     // if ((this.value)) {
-                //     //   filledInputs++;
-                //     // }
-                //   });
-
-
-                // if ()
-                // console.log(item)
-                // console.log(items.index)
-                console.log(items)
-            },
-            
-            ready: function() {
-                // check for any existing values on page load, set accordingly
-                this.checkCompleted();
-            },
-
-
             newElement(e) {
                 e.preventDefault()
                 this.numbers.push('');
@@ -176,6 +167,25 @@
 
             },
 
+
+        },
+        computed: {
+            done(){
+                let done=0;
+                for(let i=0; i<this.controls.length; i++){
+                    if(!this.controls[i].error===true){
+                        done++;
+                    }
+                }
+                return done;
+            },
+            progressWidth(){
+                this.completed= this.done * 2 * 10
+                    console.log(this.completed)
+                return{
+                    width: (this.done / this.items.length * 100) + '%'
+                }
+            },
 
 
 
