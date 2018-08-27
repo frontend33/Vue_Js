@@ -1,0 +1,200 @@
+<!doctype html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+    <link href="css/homework.css" rel="stylesheet">
+    <script src="js/vue.js"></script>
+</head>
+
+<body>
+    <style type="text/css">
+    .wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .fa {
+        font-size: 18px;
+    }
+    </style>
+    <div class="wrapper">
+        <div class="sample">
+        <h2 v-if="completed == 100">Успешно
+        <span class="fa fa-smile-o"></span>
+        </h2>
+        <h2 v-else>Заполните все поля
+          <span class="fa fa-frown-o"></span>
+        </h2>
+        <hr />
+        <div class="progress">
+          <div class="progress-bar progress-bar-striped active" 
+               :style="progressWidth"
+               :class="{'progress-bar-success' : completed === 100}"
+               >
+            {{ completed }}%
+          </div>
+        </div>
+
+
+            <form class="vue-form" v-if="!formSubmited" @submit.prevent="formSubmited = true">
+                <app-zho v-for="(item,index) in items"
+                    :name="item.name"
+                    :value="item.value"
+                    :pattern="item.pattern"
+                    :key="index"
+                    @inputchange="inputData(index, $event)"
+
+                    >
+                </app-zho>
+
+                <br>
+                <h3>guests</h3>
+                <button class="btn btn-primary" @click="newElement($event)">+
+                </button>
+                <div class="zhora cold-md-5 col-md-offset-7" v-for="(number, index) in numbers">
+                    <label @dblclick="removeDoubleClick(index)">
+                        Guests {{index}}
+                    </label>
+                    <input type="text" class="form-control" v-model="numbers[index]">
+                </div>
+                <br>
+                <br>
+                <br>
+                    <button class="btn btn-primary" :disabled="done < items.length">
+                    Отправить форму
+                </button>
+            </form>
+
+            <table class="table table-bordered" v-else>
+                    <tr v-for="(item, index) in  items">
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.value }}</td>
+                    </tr>
+            </table>
+        </div>
+    </div>
+    <script>
+    Vue.component('app-zho', {
+            props: ['name', 'value','pattern'],
+            template: `
+                 <div class="cicle-input" >
+                    <label class="label">{{ name }}
+                        <span class="fa" :class="validClass">
+                        </span>
+                    </label>
+                    <input type="text" :value="value" @input="onInput">
+                </div>
+            `,
+
+            computed: {
+                validClass(){
+                    return this.pattern.test(this.value) ?
+                    'fa-check-circle text-success':
+                    'fa-exclamation-circle text-danger'
+                }
+            },
+            methods: {
+                onInput(e){
+                    // Объявляем событие в котором записываем только валидные значения инпута сравнивая паттерн с нашим value
+                    this.$emit('inputchange',{
+                        value: e.target.value,
+                        valid: this.pattern.test(e.target.value)
+                    });
+                }
+            }
+        });
+
+
+    let sample = new Vue({
+        el: '.sample',
+        data: {
+            formSubmited: false,
+            numbers: [],
+            items: [{
+                    name: 'Name',
+                    value: '',
+                    pattern: /^[a-zA-Z ]{2,30}$/
+                },
+                {
+                    name: 'Phone',
+                    value: '',
+                    pattern: /^[0-9]{7,14}$/
+                },
+                {
+                    name: 'Email',
+                    value: '',
+                    pattern: /.+/
+                },
+                {
+                    name: 'Some Field 1',
+                    value: '',
+                    pattern: /.+/
+                },
+                {
+                    name: 'Some Field 2',
+                    value: '',
+                    pattern: /.+/
+                }
+            ],
+            controls: [],
+            completed: 0,
+            done: 0
+
+
+        },
+
+        
+// Обращаемся к hoocks
+
+        methods: {
+            inputData(index, data) {
+                console.log(data)
+               this.items[index].value=data.value
+               // Записываем только валидные значения в controls, с объекта объявленном ранее
+               this.controls[index]=data.valid
+               let done=0;
+               for(let i=0; i<this.controls.length; i++){
+                    if(this.controls[i]){
+                        done++;
+                    }
+                }
+                this.done=done
+                console.log(done)
+            },
+
+            newElement(e) {
+                e.preventDefault()
+                this.numbers.push('');
+
+
+            },
+            removeDoubleClick(index) {
+                this.numbers.splice(index, 1);
+
+            },
+
+
+        },
+        computed: {
+            progressWidth(){
+                this.completed= this.done * 2 * 10
+                return{
+                    width: (this.done / this.items.length * 100) + '%'
+                }
+            },
+
+
+
+        },
+
+
+    });
+    </script>
+</body>
+
+</html>
